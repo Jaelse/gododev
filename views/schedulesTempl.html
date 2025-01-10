@@ -1,0 +1,8 @@
+{{ define "schedulesTempl"}}
+<div hx-get="/schedules" hx-trigger="load" hx-swap="innerHTML"></div>
+<div>
+	<p>Create Next Schedule</p>
+	{{template "createSchedule" }}
+</div>
+
+{{ end }}

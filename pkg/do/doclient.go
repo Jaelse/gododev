@@ -1,7 +1,6 @@
-package main
+package do
 
 import (
-	"context"
 	"fmt"
 	"os"
 
@@ -9,19 +8,20 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func main() {
+type DoClient struct {
+	client *godo.Client
+}
+
+func NewClient() DoClient {
 	err := godotenv.Load()
 
 	if err != nil {
-		fmt.Errorf(err.Error())
+		_ = fmt.Errorf(err.Error())
 	}
 
 	client := godo.NewFromToken(os.Getenv("DO_PAT"))
-	acc, _, err := client.Account.Get(context.TODO())
 
-	if err != nil {
-		fmt.Errorf(err.Error())
+	return DoClient{
+		client: client,
 	}
-
-	fmt.Printf(acc.Name)
 }

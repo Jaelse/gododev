@@ -1,0 +1,17 @@
+{{ define "createSchedule" }}
+<form hx-post="/schedules" hx-target="#schedules" hx-target="innerHTML">
+	<label for="schedule-time"
+		>Enter Schedule (24-hour format):
+		<input type="time" id="schedule-time" name="schedule-time" required />
+	</label>
+	<br />
+
+	<label for="repeat">
+		<input type="checkbox" id="repeat" name="repeat" />
+		Repeat
+	</label>
+	<br /><br />
+	<button type="submit">Submit</button>
+</form>
+
+{{ end }}
