@@ -1,6 +1,23 @@
 {{ define "droplets"}}
 <div id="droplets">
-	{{ if .Droplets}} {{range .Droplets}} {{.}} {{end}} {{ else }}
+	{{ if .Droplets}}
+	<table>
+		<tr>
+			<th>
+				Droplet ID
+			</th>
+			<th>Droplet Name</th>
+			<th>Region</th>
+		</tr>
+		{{range .Droplets}}
+		<tr>
+			<td>{{.ID}}</td>
+			<td>{{.Name}}</td>
+			<td>{{.Region.Slug}}</td>
+		</tr>
+		{{end}}
+	</table>
+	{{ else }}
 	<div>No Have</div>
 </div>
 {{end}} {{end}}

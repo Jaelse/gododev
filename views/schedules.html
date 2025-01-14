@@ -1,6 +1,28 @@
 {{ define "schedules"}}
 <div id="schedules">
-	{{ if .Schedules}} {{range .Schedules}} {{.}} {{end}} {{ else }}
+	{{ if .Schedules}}
+	<table>
+		<tr>
+			<th>
+				Droplet ID
+			</th>
+			<th>
+				Schedule Time
+			</th>
+			<th>
+				Repeat
+			</th>
+			<th>Delete</th>
+		</tr>
+		{{range .Schedules}} <tr>
+			<td>{{.DropletID}}</td>
+			<td>{{.IsDone}}</td>
+			<td>{{.IsDone}}</td>
+			<td><button>Delete</button></td>
+		</tr> {{end}}
+	</table>
+	{{ else }}
 	<div>No Have</div>
 </div>
+
 {{end}} {{end}}

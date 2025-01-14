@@ -1,24 +1,103 @@
 {{ block "index" .}}
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>GoDODev</title>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/static/css/styles.css" />
-		<script
-			src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js"
-			integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1"
-			crossorigin="anonymous"
-		></script>
-	</head>
-	<body style="background-color: black; color: white">
-		<div>GoDODev</div>
-		<br />
-		<p>Schedules</p>
-		<div>{{template "schedulesTempl"}}</div>
-		<p>Droplets</p>
-		<div>{{template "dropletsTempl"}}</div>
-	</body>
+
+<head>
+	<title>GoDODev</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="/static/css/styles.css" />
+	<script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js"
+		integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1"
+		crossorigin="anonymous"></script>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+		body {
+			min-height: 100vh;
+			padding-top: 10px;
+			background-color: black;
+			font-family: 'Press Start 2P', sans-serif;
+			background-color: black;
+			color: white
+		}
+
+		header {
+			font-size: 4rem;
+			font-weight: bold;
+			color: white;
+			text-shadow:
+				2px 2px 0 red,
+				4px 4px 0 blue,
+				6px 6px 0 yellow;
+			position: relative;
+			animation: glitch 1.5s infinite;
+		}
+
+		@keyframes glitch {
+
+			0%,
+			100% {
+				text-shadow:
+					2px 2px 0 red,
+					4px 4px 0 blue,
+					6px 6px 0 yellow;
+				transform: translate(0);
+			}
+
+			33% {
+				text-shadow:
+					2px 2px 0 yellow,
+					4px 4px 0 red,
+					6px 6px 0 blue;
+				transform: translate(-2px, 2px);
+			}
+
+			66% {
+				text-shadow:
+					2px 2px 0 blue,
+					4px 4px 0 yellow,
+					6px 6px 0 red;
+				transform: translate(2px, -2px);
+			}
+		}
+
+		.main {
+			max-width: 1000px;
+			min-width: 300px;
+			width: 100%;
+		}
+
+		.schedules {
+			width: 100%;
+		}
+
+		.droplets {
+			width: 100%;
+		}
+
+		hr.solid {
+			border-top: 3px solid #bbb;
+		}
+	</style>
+</head>
+
+
+<body>
+	<header>GoDODev</header>
+	<div class="main">
+		<div class="schedules">
+			<p>Schedules</p>
+			<hr class="solid">
+			<div>{{template "schedulesTempl"}}</div>
+		</div>
+		<div class="droplets">
+			<p>Droplets</p>
+			<hr class="solid">
+			<div>{{template "dropletsTempl"}}</div>
+		</div>
+	</div>
+</body>
+
 </html>
 {{ end }}
