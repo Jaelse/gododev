@@ -21,6 +21,7 @@ type IScheduleRepo interface {
 	Create(schedule *models.Schedule) models.Schedule
 	GetNextSchedules() []models.Schedule
 	MarkIsDone(id uint) models.Schedule
+	Delete(ID uint) bool
 }
 
 func (sc ScheduleRepo) Create(schedule *models.Schedule) models.Schedule {
@@ -45,4 +46,15 @@ func (sc ScheduleRepo) MarkIsDone(id uint) models.Schedule {
 
 	sc.db.Save(&schedule)
 	return schedule
+}
+
+func (sc ScheduleRepo) Delete(ID uint) bool {
+	result := sc.db.Delete(&models.Schedule{}, ID)
+
+	if result.Error != nil {
+		fmt.Errorf("Error while deleting schedule: %s", result.Error.Error())
+		return false
+	}
+
+	return true
 }

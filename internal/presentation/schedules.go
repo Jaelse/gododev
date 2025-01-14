@@ -2,6 +2,7 @@ package presentation
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/gododev/internal/repo"
 	"github.com/gododev/pkg/models"
@@ -16,11 +17,38 @@ func LoadSchedules(e *echo.Echo, scheduleRepo repo.IScheduleRepo) {
 	})
 
 	e.POST("/schedules", func(c echo.Context) error {
+		dropletID, err := strconv.ParseUint(c.FormValue("schedule-droplet"), 10, 42)
+		if err != nil {
+			return err
+		}
+
+		at := c.FormValue("schedule-time")
+
+		repeat, err := strconv.ParseBool(c.FormValue("repeat"))
+		if err != nil {
+			return err
+		}
+
 		_ = scheduleRepo.Create(&models.Schedule{
-			DropletID: 112121212,
+			DropletID: uint(dropletID),
+			At:        at,
 			IsDone:    false,
-			Repeat:    true,
+			Repeat:    repeat,
 		})
+
+		schs := scheduleRepo.GetNextSchedules()
+		return c.Render(200, "schedules", struct{ Schedules []models.Schedule }{Schedules: schs})
+	})
+
+	e.DELETE("/schedules/:id", func(c echo.Context) error {
+
+		idStr := c.Param("id")
+		id, err := strconv.ParseUint(idStr, 10, 42)
+		if err != nil {
+			return err
+		}
+
+		scheduleRepo.Delete(uint(id))
 
 		schs := scheduleRepo.GetNextSchedules()
 		return c.Render(200, "schedules", struct{ Schedules []models.Schedule }{Schedules: schs})

@@ -1,17 +1,21 @@
 {{ define "createSchedule" }}
+<hr>
 <form hx-post="/schedules" hx-target="#schedules" hx-target="innerHTML">
-	<label for="schedule-time"
-		>Enter Schedule (24-hour format):
+	<label for="schedule-droplet">
+		Enter Droplet ID:
+		<input type="text" id="schedule-droplet" name="schedule-droplet" required />
+	</label>
+	<br />
+	<label for="schedule-time">Enter Schedule (24-hour format):
 		<input type="time" id="schedule-time" name="schedule-time" required />
 	</label>
 	<br />
 
 	<label for="repeat">
-		<input type="checkbox" id="repeat" name="repeat" />
-		Repeat
+		Repeat:
+		<input type="checkbox" id="repeat" name="repeat" value="true" />
 	</label>
 	<br /><br />
 	<button type="submit">Submit</button>
 </form>
-
 {{ end }}
