@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -9,5 +11,6 @@ type Schedule struct {
 	DropletID uint
 	Repeat    bool
 	IsDone    bool
-	At        string
+	At        time.Time
+	Snapshot  Snapshot
 }

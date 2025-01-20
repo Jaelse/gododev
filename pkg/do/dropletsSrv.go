@@ -8,17 +8,17 @@ import (
 )
 
 type DropletSrv interface {
-	Get(id int, ctx context.Context) (*godo.Droplet,error)
+	Get(id int, ctx context.Context) (*godo.Droplet, error)
 	GetAll(ctx context.Context) ([]godo.Droplet, error)
 	Create(ctx context.Context) (*godo.Droplet, error)
-	TakeSnapshop(id int, ctx context.Context) error
-	GetSnapshotByDropletID(id int, ctx context.Context) []string
-	ListSnapshotByDropeltId(id int, ctx context.Context) ([]godo.Snapshot, error)
+	Kill(id int, ctx context.Context) error
+	TakeSnapshop(id int, name string, ctx context.Context) error
+	ListSnapshotByDropeltId(id int, ctx context.Context) ([]godo.Image, error)
 	CreateDropletFromSnapshotID(id int, ctx context.Context) (*godo.Droplet, error)
 }
 
-func (dc DoClient) Get(id int, ctx context.Context) (*godo.Droplet,error){
-	droplet, _, err := dc.client.Droplets.Get(ctx,id)
+func (dc DoClient) Get(id int, ctx context.Context) (*godo.Droplet, error) {
+	droplet, _, err := dc.client.Droplets.Get(ctx, id)
 
 	if err != nil {
 		return nil, err
@@ -76,22 +76,39 @@ func (dc DoClient) Create(ctx context.Context) (*godo.Droplet, error) {
 	return drop, nil
 }
 
-func (dc DoClient) TakeSnapshop(id int, ctx context.Context) error {
-	action, _, err := dc.client.DropletActions.Snapshot(ctx, id, "okokok")
+func (dc DoClient) Kill(id int, ctx context.Context) error {
+	res, err := dc.client.Droplets.Delete(ctx, id)
+
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Actions %s suceeded", action)
+	if res.StatusCode != 200 {
+		return fmt.Errorf("Something went wrong while killing the droplet")
+	}
 	return nil
 }
 
-func (dc DoClient) GetSnapshotByDropletID(id int, ctx context.Context) []string {
-	return []string{}
+func (dc DoClient) TakeSnapshop(id int, name string, ctx context.Context) error {
+	action, _, err := dc.client.DropletActions.Snapshot(ctx, id, name)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Action:\n %s \n suceeded\n", action)
+	return nil
 }
 
-func (dc DoClient) ListSnapshotByDropeltId(id int, ctx context.Context) ([]godo.Snapshot, error) {
-	return nil, nil
+func (dc DoClient) ListSnapshotByDropeltId(id int, ctx context.Context) ([]godo.Image, error) {
+	opt := &godo.ListOptions{}
+
+	snaps, _, err := dc.client.Droplets.Snapshots(ctx, id, opt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return snaps, nil
 }
 
 func (dc DoClient) CreateDropletFromSnapshotID(id int, ctx context.Context) (*godo.Droplet, error) {

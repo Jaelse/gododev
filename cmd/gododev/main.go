@@ -8,6 +8,7 @@ import (
 	"github.com/gododev/internal/presentation"
 	"github.com/gododev/internal/repo"
 	"github.com/gododev/pkg/do"
+	"github.com/gododev/pkg/scheduler"
 	"github.com/gododev/pkg/sqlitedb"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -30,18 +31,16 @@ func newTemplate() *Templates {
 
 func main() {
 	db := dbstuff()
-	// var snapshotRepo repo.ISnapshotRepo
-	// snapshotRepo = repo.New(db)
-
-	// snap := snapshotRepo.Get(1)
-	// fmt.Print("%s", snap.ID)
 
 	var scheduleRepo repo.IScheduleRepo
 	scheduleRepo = repo.NewScheduleRepo(db)
 
+	var snapshotRepo repo.ISnapshotRepo
+	snapshotRepo = repo.NewSnapshotRepo(db)
+
 	doc := do.NewClient()
-	// sch := scheduler.New(scheduleRepo)
-	// sch.Run()
+	sch := scheduler.New(scheduleRepo,snapshotRepo)
+	sch.Run()
 
 	view(scheduleRepo, doc)
 }
