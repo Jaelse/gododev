@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Schedule struct {
+type DownSchedule struct {
 	gorm.Model
 	DropletID uint
 	Repeat    bool

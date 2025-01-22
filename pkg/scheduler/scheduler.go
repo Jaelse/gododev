@@ -77,7 +77,7 @@ func (s Scheduler) dropDropletRoutine() {
 	}
 }
 
-func (s Scheduler) initializeSnapshot(sc models.Schedule, dplt *godo.Droplet) {
+func (s Scheduler) initializeSnapshot(sc models.DownSchedule, dplt *godo.Droplet) {
 	snapshotName := fmt.Sprintf("%s-%d%d%d-%d%d", dplt.Name, time.Now().Day(), time.Now().Month(), time.Now().Year(), time.Now().Hour(), time.Now().Minute())
 	log.Printf("Taking snapshot for %s\n", dplt.Name)
 	err := s.dropSrv.TakeSnapshop(int(sc.DropletID), snapshotName, context.TODO())
@@ -95,7 +95,7 @@ func (s Scheduler) initializeSnapshot(sc models.Schedule, dplt *godo.Droplet) {
 	log.Printf("Snapshot with name %s created for droplet %s\n", snapshotName, dplt.Name)
 }
 
-func (s Scheduler) initializeDropletKill(sc models.Schedule, snaprec *models.Snapshot, dplt *godo.Droplet) {
+func (s Scheduler) initializeDropletKill(sc models.DownSchedule, snaprec *models.Snapshot, dplt *godo.Droplet) {
 	// If the snapshot is initiated then check if the snapshot is ready
 	snaps, err := s.dropSrv.ListSnapshotByDropeltId(int(sc.DropletID), context.TODO())
 	if err != nil {
@@ -116,7 +116,7 @@ func (s Scheduler) initializeDropletKill(sc models.Schedule, snaprec *models.Sna
 			if sc.Repeat {
 				newTime := time.Date(sc.At.Year(), sc.At.Month(), sc.At.Day()+1, sc.At.Hour(), sc.At.Minute(), 0, 0, sc.At.Location())
 				// make a new schedule, add the droplet id and mark it as repeat
-				newsch := s.scheduleRepo.Create(&models.Schedule{
+				newsch := s.scheduleRepo.Create(&models.DownSchedule{
 					DropletID: sc.DropletID,
 					Repeat:    sc.Repeat,
 					IsDone:    false,

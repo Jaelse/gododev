@@ -20,6 +20,6 @@ func ConfigureDB() (*gorm.DB, error) {
 }
 
 func Migrate(db *gorm.DB) error {
-	err := db.AutoMigrate(&models.Snapshot{}, &models.Schedule{})
+	err := db.AutoMigrate(&models.Snapshot{}, &models.DownSchedule{})
 	return err
 }

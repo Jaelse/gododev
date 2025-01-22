@@ -14,7 +14,7 @@ import (
 func LoadSchedules(e *echo.Echo, scheduleRepo repo.IScheduleRepo) {
 	e.GET("/schedules", func(c echo.Context) error {
 		schs := scheduleRepo.GetNextSchedules()
-		return c.Render(200, "schedules", struct{ Schedules []models.Schedule }{Schedules: schs})
+		return c.Render(200, "schedules", struct{ Schedules []models.DownSchedule }{Schedules: schs})
 	})
 
 	e.POST("/schedules", func(c echo.Context) error {
@@ -35,7 +35,7 @@ func LoadSchedules(e *echo.Echo, scheduleRepo repo.IScheduleRepo) {
 			return err
 		}
 
-		_ = scheduleRepo.Create(&models.Schedule{
+		_ = scheduleRepo.Create(&models.DownSchedule{
 			DropletID: uint(dropletID),
 			At:        *att,
 			IsDone:    false,
@@ -43,7 +43,7 @@ func LoadSchedules(e *echo.Echo, scheduleRepo repo.IScheduleRepo) {
 		})
 
 		schs := scheduleRepo.GetNextSchedules()
-		return c.Render(200, "schedules", struct{ Schedules []models.Schedule }{Schedules: schs})
+		return c.Render(200, "schedules", struct{ Schedules []models.DownSchedule }{Schedules: schs})
 	})
 
 	e.DELETE("/schedules/:id", func(c echo.Context) error {
@@ -57,7 +57,7 @@ func LoadSchedules(e *echo.Echo, scheduleRepo repo.IScheduleRepo) {
 		scheduleRepo.Delete(uint(id))
 
 		schs := scheduleRepo.GetNextSchedules()
-		return c.Render(200, "schedules", struct{ Schedules []models.Schedule }{Schedules: schs})
+		return c.Render(200, "schedules", struct{ Schedules []models.DownSchedule }{Schedules: schs})
 	})
 }
 
